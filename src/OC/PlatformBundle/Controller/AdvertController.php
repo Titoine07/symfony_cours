@@ -81,9 +81,19 @@ class AdvertController extends Controller {
 			// Puis on redirige vers la page de visualisation de cettte annonce
 			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
 		}
+		
+		$advert = array(
+		  'title'   => 'Recherche développpeur Symfony2',
+		  'id'      => 1,
+		  'author'  => 'Alexandre',
+		  'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
+		  'date'    => new \Datetime()
+		);
 
 		// Si on n'est pas en POST, alors on affiche le formulaire
-		return $this->render('OCPlatformBundle:Advert:add.html.twig');
+		return $this->render('OCPlatformBundle:Advert:add.html.twig',  array(
+		  'advert' => $advert
+		));
 	}
 
 	public function editAction($id, Request $request) {
@@ -94,6 +104,7 @@ class AdvertController extends Controller {
 
 			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
 		}
+		
 		$advert = array(
 		  'title'   => 'Recherche développpeur Symfony2',
 		  'id'      => $id,
