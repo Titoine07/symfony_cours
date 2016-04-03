@@ -21,10 +21,7 @@ class AdvertController extends Controller {
 
 		// Ici, on récupérera la liste des annonces, puis on la passera au template
 		// Mais pour l'instant, on ne fait qu'appeler le template
-//        return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
-//                    'listAdverts' => array()
-//        ));
-//        
+      
 		// Notre liste d'annonce en dur
 		$listAdverts = array(
 			array(
@@ -71,6 +68,17 @@ class AdvertController extends Controller {
 	}
 
 	public function addAction(Request $request) {
+		// On recupere le service
+		$antispam = $this->container->get('oc_platform.antispam');
+		
+		// Je pars du principeque $text contient le texte 'un message quelconque
+		$text = '...';
+		if ($antispam->isSpam($text)) 
+		{
+			throw new \Exception('Votremessage a été détecté comme spam!');
+		}
+		// Ici le message n'est pas un spam
+		
 		// La gestion d'un formulaire est particulière, mais l'idée est la suivante :
 		// Si la requête est en POST, c'est que le visiteur a soumis le formulaire
 		if ($request->isMethod('POST')) {
@@ -81,6 +89,8 @@ class AdvertController extends Controller {
 			// Puis on redirige vers la page de visualisation de cettte annonce
 			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
 		}
+		
+		
 		
 		$advert = array(
 		  'title'   => 'Recherche développpeur Symfony2',
