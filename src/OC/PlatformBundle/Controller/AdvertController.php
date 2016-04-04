@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+
 class AdvertController extends Controller {
 
 	public function indexAction($page) {
@@ -75,7 +76,7 @@ class AdvertController extends Controller {
 		$text = '...';
 		if ($antispam->isSpam($text)) 
 		{
-			throw new \Exception('Votremessage a été détecté comme spam!');
+			throw new \Exception('Votre message a été détecté comme spam!');
 		}
 		// Ici le message n'est pas un spam
 		

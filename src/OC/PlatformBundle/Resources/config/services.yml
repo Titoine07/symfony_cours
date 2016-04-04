@@ -7,6 +7,6 @@ services:
 
     oc_platform.antispam:
         class: OC\PlatformBundle\Antispam\OCAntispam
-        arguments: [@mailer, %locale%, 50]  
+        arguments: [@mailer, %locale%, 50]
         # Tableau d'arguments @mailer : le service Mailer, %locale%: parametre locole pour récuperer la langue dans parameters.yml
         
