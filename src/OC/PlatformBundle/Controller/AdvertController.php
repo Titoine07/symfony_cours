@@ -7,7 +7,7 @@ namespace OC\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
+use OC\PlatformBundle\Entity\Advert;
 
 class AdvertController extends Controller {
 
@@ -22,7 +22,6 @@ class AdvertController extends Controller {
 
 		// Ici, on récupérera la liste des annonces, puis on la passera au template
 		// Mais pour l'instant, on ne fait qu'appeler le template
-      
 		// Notre liste d'annonce en dur
 		$listAdverts = array(
 			array(
@@ -54,56 +53,65 @@ class AdvertController extends Controller {
 
 	public function viewAction($id) {
 		// Ici, on récupérera l'annonce correspondante à l'id $id
+		// ON recupere le Repository
+		$repository = $this->getDoctrine()
+				->getManager()
+				->getRepository('OCPlatformBundle:Advert')
+		;
 
-		$advert = array(
-		  'title'   => 'Recherche développpeur Symfony2',
-		  'id'      => $id,
-		  'author'  => 'Alexandre',
-		  'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-		  'date'    => new \Datetime()
-		);
+		// On récupère l'éntité correspondante à l'id $id
+		$advert = $repository->find($id);
 
+		// $advert est donc une instance de OC\PlatformBundle\Entity\Advert
+		// ou null si l'id $id  n'existe pas, d'où ce if :
+		if (null === $advert) {
+			throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas.");
+		}
+
+		// Le render ne change pas, on passait avant un tableau, maintenant un objet
 		return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-		  'advert' => $advert
+					'advert' => $advert
 		));
 	}
 
 	public function addAction(Request $request) {
-		// On recupere le service
+
+		// Création de l'entité
+		$advert = new Advert();
+		$advert->setTitle('Recherche développeur Symfony2.');
+		$advert->setAuthor('Alexandre');
+		$advert->setContent("Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…");
+		// On peut ne pas définir ni la date ni la publication,
+		// car ces attributs sont définis automatiquement dans le constructeur
+		// On récupère l'EntityManager
+		$em = $this->getDoctrine()->getManager();
+		// Étape 1 : On « persiste » l'entité
+		$em->persist($advert);
+
+
+		// On recupere le service antispam
 		$antispam = $this->container->get('oc_platform.antispam');
-		
 		// Je pars du principeque $text contient le texte 'un message quelconque
-		$text = '...';
-		if ($antispam->isSpam($text)) 
-		{
+		if ($antispam->isSpam($advert->getContent())) {
 			throw new \Exception('Votre message a été détecté comme spam!');
 		}
 		// Ici le message n'est pas un spam
-		
+		// Étape 2 : On « flush » tout ce qui a été persisté avant
+		$em->flush();
+
+
 		// La gestion d'un formulaire est particulière, mais l'idée est la suivante :
 		// Si la requête est en POST, c'est que le visiteur a soumis le formulaire
 		if ($request->isMethod('POST')) {
 			// Ici, on s'occupera de la création et de la gestion du formulaire
-
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
-
 			// Puis on redirige vers la page de visualisation de cettte annonce
-			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
+			return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
 		}
-		
-		
-		
-		$advert = array(
-		  'title'   => 'Recherche développpeur Symfony2',
-		  'id'      => 1,
-		  'author'  => 'Alexandre',
-		  'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-		  'date'    => new \Datetime()
-		);
 
 		// Si on n'est pas en POST, alors on affiche le formulaire
-		return $this->render('OCPlatformBundle:Advert:add.html.twig',  array(
-		  'advert' => $advert
+		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+					'advert' => $advert
 		));
 	}
 
@@ -115,17 +123,17 @@ class AdvertController extends Controller {
 
 			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
 		}
-		
+
 		$advert = array(
-		  'title'   => 'Recherche développpeur Symfony2',
-		  'id'      => $id,
-		  'author'  => 'Alexandre',
-		  'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-		  'date'    => new \Datetime()
+			'title' => 'Recherche développpeur Symfony2',
+			'id' => $id,
+			'author' => 'Alexandre',
+			'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
+			'date' => new \Datetime()
 		);
 
 		return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
-		  'advert' => $advert
+					'advert' => $advert
 		));
 	}
 
