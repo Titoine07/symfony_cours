@@ -7,9 +7,23 @@
 {% endblock %}
 
 {% block ocplatform_body %}
+	
+  {# On vérifie qu'une image soit bien associée à l'annonce #}
+  <div class="row">
+    <div class="col-xs-3"><div >
+      {% if advert.image is not null %}
+        <img style="width : 170px; margin-top: 15px " src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+      {% endif %}
+      </div>
+    </div>
+    <div class="col-md-9"><div >
+        <h2>{{ advert.title }}</h2>
+        <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+      </div>
+    </div>
+  </div>
 
-  <h2>{{ advert.title }}</h2>
-  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+
 
   <div class="well">
     {{ advert.content }}
