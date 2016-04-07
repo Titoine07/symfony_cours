@@ -10,12 +10,14 @@
 	
   {# On vérifie qu'une image soit bien associée à l'annonce #}
   <div class="row">
-    <div class="col-xs-3"><div >
+   
       {% if advert.image is not null %}
+        <div class="col-xs-3"><div >  
         <img style="width : 170px; margin-top: 15px " src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
-      {% endif %}
-      </div>
-    </div>
+        </div></div>
+	 {% endif %}
+	  
+
     <div class="col-md-9"><div >
         <h2>{{ advert.title }}</h2>
         <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
@@ -23,11 +25,40 @@
     </div>
   </div>
 
-
-
   <div class="well">
     {{ advert.content }}
+    <div>
+    {% if listAdvertSkills|length > 0 %}
+    Cette annonce requiert les compétences suivantes :
+      <ul>
+        {% for advertSkill in listAdvertSkills %}
+          <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+	{% if not advert.categories.empty %}
+      <p>
+    Elle est parue dans les catégories suivantes :
+    {% for category in advert.categories %}
+      {{ category.name }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+      </p>
+    {% endif %}
+    
+
   </div>
+  
+    {% if listApplications is not null %}
+      {% for listApplication in listApplications %}
+	 <div class="col-xs-11 col-md-offset-1"><div class="panel panel-default">
+         <p>{{ listApplication.content }}</p>
+         <i>Par {{ listApplication.author }}, le {{ listApplication.date|date('d/m/Y') }}</i>
+        </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  
 
   <p>
     <a href="{{ path('oc_platform_home') }}" class="btn btn-default">

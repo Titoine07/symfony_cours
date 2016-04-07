@@ -16,7 +16,18 @@ class Advert {
 	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
 	 */
 	private $image;
-  
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="OC\PlatformBundle\Entity\Category", cascade={"persist"})
+	 */
+	private $categories;
+	
+    /**
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
+     */
+    private $applications; // Notez le « s », une annonce est liée à plusieurs candidatures
+	
+	
 	/**
 	 * @var int
 	 *
@@ -203,5 +214,73 @@ class Advert {
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \OC\PlatformBundle\Entity\Category $categories
+     * @return Advert
+     */
+    public function addCategory(\OC\PlatformBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \OC\PlatformBundle\Entity\Category $categories
+     */
+    public function removeCategory(\OC\PlatformBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Add applications
+     *
+     * @param \OC\PlatformBundle\Entity\Application $applications
+     * @return Advert
+     */
+    public function addApplication(\OC\PlatformBundle\Entity\Application $applications)
+    {
+        $this->applications[] = $applications;
+    // On lie l'annonce à la candidature
+    $application->setAdvert($this);
+	
+        return $this;
+    }
+
+    /**
+     * Remove applications
+     *
+     * @param \OC\PlatformBundle\Entity\Application $applications
+     */
+    public function removeApplication(\OC\PlatformBundle\Entity\Application $applications)
+    {
+        $this->applications->removeElement($applications);
+    }
+
+    /**
+     * Get applications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getApplications()
+    {
+        return $this->applications;
     }
 }

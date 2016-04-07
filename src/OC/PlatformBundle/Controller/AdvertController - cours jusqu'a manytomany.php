@@ -83,59 +83,73 @@ class AdvertController extends Controller {
 		  ->findBy(array('advert' => $advert))
 		;
 		
-		// On récupère maintenant la liste des AdvertSkill
-		$listAdvertSkills = $em
-		  ->getRepository('OCPlatformBundle:AdvertSkill')
-		  ->findBy(array('advert' => $advert))
-		;
-
 		// Le render ne change pas, on passait avant un tableau, maintenant un objet
 		return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-				'advert' => $advert,
-				'listApplications' => $listApplications,
-				'listAdvertSkills' => $listAdvertSkills
+					'advert' => $advert,
+					'listApplications' => $listApplications
 		));
 	}
 
 	public function addAction(Request $request) {
 
-		// On récupère l'EntityManager
-		$em = $this->getDoctrine()->getManager();
-
-		// Création de l'entité Advert
+		// Création de l'entité
 		$advert = new Advert();
 		$advert->setTitle('Recherche développeur Symfony2.');
 		$advert->setAuthor('Alexandre');
 		$advert->setContent("Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…");
+		// On peut ne pas définir ni la date ni la publication,
+		// car ces attributs sont définis automatiquement dans le constructeur
 
-		// On récupère toutes les compétences possibles
-		$listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
+		//		 Création de l'entité Image
+		$image = new Image();
+		$image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+		$image->setAlt('Job de rêve');
+		//
+		//		 On lie l'image à l'annonce
+		$advert->setImage($image);
 
-		// Pour chaque compétence
-		foreach ($listSkills as $skill) {
-		  // On crée une nouvelle « relation entre 1 annonce et 1 compétence »
-		  $advertSkill = new AdvertSkill();
+		// Création d'une première candidature
+		$application1 = new Application();
+		$application1->setAuthor('Marine');
+		$application1->setContent("J'ai toutes les qualités requises.");
 
-		  // On la lie à l'annonce, qui est ici toujours la même
-		  $advertSkill->setAdvert($advert);
-		  // On la lie à la compétence, qui change ici dans la boucle foreach
-		  $advertSkill->setSkill($skill);
+		// Création d'une deuxième candidature par exemple
+		$application2 = new Application();
+		$application2->setAuthor('Pierre');
+		$application2->setContent("Je suis très motivé.");
 
-		  // Arbitrairement, on dit que chaque compétence est requise au niveau 'Expert'
-		  $advertSkill->setLevel('Expert');
+		// On lie les candidatures à l'annonce
+		$application1->setAdvert($advert);
+		$application2->setAdvert($advert);
 
-		  // Et bien sûr, on persiste cette entité de relation, propriétaire des deux autres relations
-		  $em->persist($advertSkill);
-		}
 
-		// Doctrine ne connait pas encore l'entité $advert. Si vous n'avez pas définit la relation AdvertSkill
-		// avec un cascade persist (ce qui est le cas si vous avez utilisé mon code), alors on doit persister $advert
+
+		// On récupère l'EntityManager
+		$em = $this->getDoctrine()->getManager();
+		// Étape 1 : On « persiste » l'entité
 		$em->persist($advert);
+		// Étape 1 bis : si on n'avait pas défini le cascade={"persist"},
+		// on devrait persister à la main l'entité $image
+		// $em->persist($image);
 
-		// On déclenche l'enregistrement
+		
+		// Étape 1 bis bis : pour cette relation pas de cascade lorsqu'on persiste Advert, car la relation est
+		// définie dans l'entité Application et non Advert. On doit donc tout persister à la main ici.
+		$em->persist($application1);
+		$em->persist($application2);
+		
+		
+		// On recupere le service antispam
+		$antispam = $this->container->get('oc_platform.antispam');
+		// Je pars du principeque $text contient le texte 'un message quelconque
+		if ($antispam->isSpam($advert->getContent())) {
+			throw new \Exception('Votre message a été détecté comme spam!');
+		}
+		// Ici le message n'est pas un spam
+		
+		// Étape 2 : On « flush » tout ce qui a été persisté avant
 		$em->flush();
 
-		// … reste de la méthode
 
 		// La gestion d'un formulaire est particulière, mais l'idée est la suivante :
 		// Si la requête est en POST, c'est que le visiteur a soumis le formulaire
