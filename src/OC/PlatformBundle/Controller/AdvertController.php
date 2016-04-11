@@ -148,7 +148,7 @@ class AdvertController extends Controller {
 
 		// Si on n'est pas en POST, alors on affiche le formulaire
 		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
-					'advert' => $advert
+			'advert' => $advert
 		));
 		
 	}
@@ -205,7 +205,7 @@ class AdvertController extends Controller {
 
 		// On boucle sur les catégories de l'annonce pour les supprimer
 		foreach ($advert->getCategories() as $category) {
-		  $advert->removeCategory($category);
+			$advert->removeCategory($category);
 		}
 
 		// Pour persister le changement dans la relation, il faut persister l'entité propriétaire
@@ -232,10 +232,25 @@ class AdvertController extends Controller {
 		);
 
 		return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
-					// Tout l'intérêt est ici : le contrôleur passe
-					// les variables nécessaires au template !
-					'listAdverts' => $listAdverts
+			// Tout l'intérêt est ici : le contrôleur passe
+			// les variables nécessaires au template !
+			'listAdverts' => $listAdverts
 		));
+	}
+	
+	public function listAction() {
+		$listAdverts = $this
+			->getDoctrine()
+			->getManager()
+			->getRepository('OCPlatformBundle:Advert')
+			->getAdvertWithApplications()
+		;
+
+		foreach ($listAdverts as $advert) {
+			// Ne déclenche pas de requête : les candidatures sont déjà chargées !
+			// Vous pourriez faire une boucle dessus pour les afficher toutes
+			$advert->getApplications();
+		}
 	}
 
 }
