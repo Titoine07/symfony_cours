@@ -139,7 +139,7 @@ class AdvertRepository extends EntityRepository
 	
 	public function getAdvertWithCategories(array $categoryNames) {
 		
-		$qb = $this->createQuerryBuilder('a');
+		$qb = $this->createQueryBuilder('a');
 		
 		    // On fait une jointure avec l'entité Category avec pour alias « c »
 		$qb	->join('a.categories , c')

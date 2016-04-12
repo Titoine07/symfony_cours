@@ -6,8 +6,10 @@ namespace OC\PlatformBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 
@@ -24,28 +26,12 @@ class AdvertController extends Controller {
 		}
 
 		// Ici, on récupérera la liste des annonces, puis on la passera au template
-		// Mais pour l'instant, on ne fait qu'appeler le template
-		// Notre liste d'annonce en dur
-		$listAdverts = array(
-			array(
-				'title' => 'Recherche développpeur Symfony2',
-				'id' => 1,
-				'author' => 'Alexandre',
-				'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-				'date' => new \Datetime()),
-			array(
-				'title' => 'Mission de webmaster',
-				'id' => 2,
-				'author' => 'Hugo',
-				'content' => 'Nous recherchons un webmaster capable de maintenir notre site internet. Blabla…',
-				'date' => new \Datetime()),
-			array(
-				'title' => 'Offre de stage webdesigner',
-				'id' => 3,
-				'author' => 'Mathieu',
-				'content' => 'Nous proposons un poste pour webdesigner. Blabla…',
-				'date' => new \Datetime())
-		);
+		$listAdverts = $this
+				->getDoctrine()
+				->getManager()
+				->getRepository('OCPlatformBundle:Advert')
+				->myFindAll()
+		;
 
 
 		// Et modifiez le 2nd argument pour injecter notre liste
@@ -54,6 +40,7 @@ class AdvertController extends Controller {
 		));
 	}
 
+	
 	public function viewAction($id) {
 		// Ici, on récupérera l'annonce correspondante à l'id $id
 		
@@ -63,7 +50,6 @@ class AdvertController extends Controller {
 		// $advert = $this->getDoctrine()
 		//  ->getManager()
 		// ->find('OCPlatformBundle:Advert', $id)
-
 
 		// On récupère l'annonce $id
 		$advert = $em
@@ -97,6 +83,7 @@ class AdvertController extends Controller {
 		));
 	}
 
+	
 	public function addAction(Request $request) {
 
 		// On récupère l'EntityManager
@@ -150,9 +137,9 @@ class AdvertController extends Controller {
 		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
 			'advert' => $advert
 		));
-		
 	}
 
+	
 	public function editAction($id, Request $request) {
 		// Ici, on récupérera l'annonce correspondante à $id
 		// Même mécanisme que pour l'ajout
@@ -166,7 +153,9 @@ class AdvertController extends Controller {
 
 		// On récupère l'annonce $id
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+		$advert->setAuthor('Chuck');
 
+		
 		if (null === $advert) {
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
 		}
@@ -192,6 +181,7 @@ class AdvertController extends Controller {
 		));
 	}
 
+	
 	public function deleteAction($id) {
 		
 		$em = $this->getDoctrine()->getManager();
@@ -222,6 +212,7 @@ class AdvertController extends Controller {
 		return $this->render('OCPlatformBundle:Advert:delete.html.twig');
 	}
 
+	
 	public function menuAction() {
 		// On fixe en dur une liste ici, bien entendu par la suite
 		// on la récupérera depuis la BDD !
@@ -238,6 +229,7 @@ class AdvertController extends Controller {
 		));
 	}
 	
+	
 	public function listAction() {
 		$listAdverts = $this
 			->getDoctrine()
@@ -252,5 +244,21 @@ class AdvertController extends Controller {
 			$advert->getApplications();
 		}
 	}
+	
+	
+	public function testAction() {
+		$em = $this->getDoctrine()->getManager();
 
+		// On récupère l'annonce $id
+		$advert = $em->getRepository('OCPlatformBundle:Advert')->find(1);
+		//$advert = new Advert();
+		//$advert->setTitle("Recherche développeur !");
+
+		//$em = $this->getDoctrine()->getManager();
+		//$em->persist($advert);
+		//$em->flush(); // C'est à ce moment qu'est généré le slug
+
+		return new Response('Slug généré : ' . $advert->getSlug());
+		// Affiche « Slug généré : recherche-developpeur »
+	}
 }

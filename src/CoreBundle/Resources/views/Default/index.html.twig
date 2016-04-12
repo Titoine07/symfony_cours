@@ -1,1 +1,11 @@
-Hello World!
+{% extends "CoreBundle::layout.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+<a href="{{ path('oc_platform_home') }}">Affichage de la platforme d'annonce</a>
+
+{% endblock %}

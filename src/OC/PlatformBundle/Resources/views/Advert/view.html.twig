@@ -27,8 +27,12 @@
 
   <div class="well">
     {{ advert.content }}
-    <div>
+	
+	<hr>
+	
+  <div class="row">
     {% if listAdvertSkills|length > 0 %}
+    <div class="col-xs-6">
     Cette annonce requiert les compétences suivantes :
       <ul>
         {% for advertSkill in listAdvertSkills %}
@@ -37,16 +41,21 @@
       </ul>
     </div>
     {% endif %}
-	{% if not advert.categories.empty %}
-      <p>
-    Elle est parue dans les catégories suivantes :
-    {% for category in advert.categories %}
-      {{ category.name }}{% if not loop.last %}, {% endif %}
-    {% endfor %}
-      </p>
-    {% endif %}
-    
 
+  <div class="col-xs-6">
+    {% if not advert.categories.empty %}
+        <div>
+        Elle est parue dans les catégories suivantes :
+		  <ul>
+            {% for category in advert.categories %}
+                
+                    <li>{{ category.name }}{% if not loop.last %}, {% endif %}</li>
+            {% endfor %}
+		  </ul>
+        </div>			  
+    {% endif %}
+  </div>
+  </div>
   </div>
   
     {% if listApplications is not null %}
