@@ -49,20 +49,8 @@ class Application
      */
     private $date;
 
-	/**
-	 * @ORM\PrePersist
-	 */
-	public function increase() {
-		$this->getAdvert()->increaseApplication();
-	}
 
-	/**
-	 * @ORM\PreRemove
-	 */
-	public function decrease() {
-		$this->getAdvert()->decreaseApplication();
-	}
-
+	
 	public function __construct()
    {
     $this->date = new \Datetime();
@@ -170,4 +158,19 @@ class Application
     {
         return $this->advert;
     }
+	
+	
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function increase() {
+		$this->getAdvert()->increaseApplication();
+	}
+
+	/**
+	 * @ORM\PreRemove
+	 */
+	public function decrease() {
+		$this->getAdvert()->decreaseApplication();
+	}
 }

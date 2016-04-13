@@ -2,7 +2,7 @@
 
 namespace OC\PlatformBundle\Entity;
 
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 // N'oubliez pas ce use :
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Advert {
 
 	/**
-	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
 	 */
 	private $image;
 	
@@ -31,6 +31,11 @@ class Advert {
      * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
      */
     private $applications; // Notez le « s », une annonce est liée à plusieurs candidatures
+	
+    /**
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+     */
+    private $advertskills; 
 	
 	
 	
@@ -99,10 +104,12 @@ class Advert {
 	
 	public function __construct() {
 		// Par défaut, la date de l'annonce est la date d'aujourd'hui
-		$this->date = new \Datetime();
+		$this->date		= new \Datetime();
+		$this->categories	= new ArrayCollection();
+		$this->applications	= new ArrayCollection();
+		$this->advertskills	= new ArrayCollection();
 	}
 
-	
 	
 	
 	/**
@@ -286,7 +293,7 @@ class Advert {
     {
         $this->applications[] = $applications;
     // On lie l'annonce à la candidature
-    $application->setAdvert($this);
+		$applications->setAdvert($this);
 	
         return $this;
     }
@@ -395,5 +402,41 @@ class Advert {
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add advertskills
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertskills
+     * @return Advert
+     */
+    public function addAdvertskill(\OC\PlatformBundle\Entity\AdvertSkill $advertskills)
+    {
+        $this->advertskills[] = $advertskills;
+	// Pour que l'attribut advert de l'object $advertskills soit défini, il faut absolument faire d'abord appel au setter setAdvert(),
+	// car c'est le seul qui accède à cet attribut (qui est en private)
+		$advertskills->setAdvert($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove advertskills
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertskills
+     */
+    public function removeAdvertskill(\OC\PlatformBundle\Entity\AdvertSkill $advertskills)
+    {
+        $this->advertskills->removeElement($advertskills);
+    }
+
+    /**
+     * Get advertskills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAdvertskills()
+    {
+        return $this->advertskills;
     }
 }
