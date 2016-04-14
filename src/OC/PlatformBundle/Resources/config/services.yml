@@ -9,6 +9,10 @@ services:
         class: OC\PlatformBundle\Antispam\OCAntispam
         arguments: [@mailer, %locale%, 50]
         # Tableau d'arguments @mailer : le service Mailer, %locale%: parametre locole pour récuperer la langue dans parameters.yml
+       
+    oc_platform.advert_purger:
+        class: OC\PlatformBundle\Purger\OCPurger
+        arguments: [@doctrine.orm.entity_manager]
         
     oc_platform.doctrine.notification:
         class: OC\PlatformBundle\DoctrineListener\ApplicationNotification

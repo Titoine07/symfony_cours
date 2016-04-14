@@ -113,7 +113,8 @@ class AdvertController extends Controller {
 	}
 
 	
-	public function editAction($id) {
+	public function editAction($id) 
+	{
 		// Ici, on récupérera l'annonce correspondante à $id
 		// Même mécanisme que pour l'ajout
 		if ($request->isMethod('POST')) {
@@ -141,7 +142,8 @@ class AdvertController extends Controller {
 	}
 
 	
-	public function deleteAction($id, Request $request ) {
+	public function deleteAction($id, Request $request ) 
+	{
 		
 		$em = $this->getDoctrine()->getManager();
 
@@ -171,7 +173,8 @@ class AdvertController extends Controller {
 	}
 
 	
-	public function menuAction($limit = 3) {
+	public function menuAction($limit = 3) 
+	{
 
 		$listAdverts = $this->getDoctrine()
 				->getManager()
@@ -192,7 +195,8 @@ class AdvertController extends Controller {
 	}
 	
 	
-	public function listAction() {
+	public function listAction() 
+	{
 		$listAdverts = $this
 			->getDoctrine()
 			->getManager()
@@ -208,7 +212,8 @@ class AdvertController extends Controller {
 	}
 	
 	
-	public function testAction() {
+	public function testAction() 
+	{
 		$em = $this->getDoctrine()->getManager();
 
 		// On récupère l'annonce $id
@@ -222,5 +227,14 @@ class AdvertController extends Controller {
 
 		return new Response('Slug généré : ' . $advert->getSlug());
 		// Affiche « Slug généré : recherche-developpeur »
+	}
+	
+	public function purge($days)
+	{
+		$purgator = $this->container->get('oc_platform.advert_purger');
+	
+		$purgator->removeOldUpdate($days);
+		
+
 	}
 }

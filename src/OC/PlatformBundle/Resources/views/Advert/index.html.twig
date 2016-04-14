@@ -1,4 +1,4 @@
-{# src/OC/PlatformBundle/Resources/views/Advert/index.html.twig #}
+F{# src/OC/PlatformBundle/Resources/views/Advert/index.html.twig #}
 
 {% extends "OCPlatformBundle::layout.html.twig" %}
 
@@ -67,4 +67,7 @@
 			</li>
 		{% endfor %}
 	</ul>
+	<p> Purger toutes les annonces de plus de 15jours :
+	<a class="btn btn-danger" href="{{ path('oc_platform_purge'}}" role="button">Purger</a>
+	</p>
 {% endblock %}
