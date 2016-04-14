@@ -18,7 +18,7 @@ class AppKernel extends Kernel
 			new OC\PlatformBundle\OCPlatformBundle(),
 			new CoreBundle\CoreBundle(),
 			new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
-        );
+		);
 
 		if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
 			$bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();

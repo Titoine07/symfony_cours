@@ -158,7 +158,7 @@ class AdvertRepository extends EntityRepository {
 
 		// On fait une jointure avec l'entité Category avec pour alias « c »
 		$qb->join('a.categories , c')
-				->addSelect('c')
+			->addSelect('c')
 		;
 
 		// Puis on filtre sur le nom des catégories à l'aide d'un IN
@@ -166,8 +166,8 @@ class AdvertRepository extends EntityRepository {
 		// La syntaxe du IN et d'autres expressions se trouve dans la documentation Doctrine
 
 		return $qb
-						->getQuery()
-						->getResult()
+			->getQuery()
+			->getResult()
 		;
 	}
 
