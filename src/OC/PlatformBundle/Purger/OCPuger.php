@@ -22,17 +22,35 @@ class OCPurger
 	
 	public function removeOldUpdate($days) 
 	{
+		$date = date("Y-m-d H:i:s");
+		$substractDate = strtotime ( '-15 day' , strtotime ( $date ) ) ;
+		$endDate = date ("Y-m-d H:i:s" , $substractDate );
 		
+
 		
+		$listAdverts = $this->_em->createQueryBuilder();
 		
-		
-		
-		$listAdvertApp = $this->_em
-				->getRepository('OCPlatformBundle:Advert')
-				->getAdvertWithApplications()
+		$listAdverts->select('a')
+			->from('OCPlatformBundle:Advert', 'a')
+			->where( 'a.updated_at < :subdate' )
+			->setParameter ( 'subdate', $endDate )
+			->getQuery()
+			->getResult()
 		;
 		
-		
+		foreach ( $listAdverts as $listAdvert ) {
+			$listApplications = $listAdvert->addApplication();
+			
+			$advertSkills = $this->_em->getRepository('PlatformBundle:AdvertSkill')->findByAdvert($listAdvert->getId());
+			
+			foreach ( $advertSkills as $advertSkill ) {
+				$this->_em->remove($advertSkill);
+			}
+			
+			$this->_em->remove($listApplications);
+			$this->_em->remove($listAdvert);
+			$this->_em->flush();
+		}
 	}
 
 }

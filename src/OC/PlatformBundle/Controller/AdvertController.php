@@ -233,8 +233,8 @@ class AdvertController extends Controller {
 	{
 		$purgator = $this->container->get('oc_platform.advert_purger');
 	
+		
 		$purgator->removeOldUpdate($days);
 		
-
 	}
 }
