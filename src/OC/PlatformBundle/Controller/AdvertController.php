@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Form\AdvertType;
+use OC\PlatformBundle\Form\AdvertEditType;
 use OC\PlatformBundle\Entity\AdvertSkill;
 
 
@@ -97,47 +99,61 @@ class AdvertController extends Controller {
 	
 	public function addAction(Request $request) {
 		
-		// La gestion d'un formulaire est particulière, mais l'idée est la suivante :
-		// Si la requête est en POST, c'est que le visiteur a soumis le formulaire
-		if ($request->isMethod('POST')) {
-			// Ici, on s'occupera de la création et de la gestion du formulaire
-			
+		// On crée un objet Advert
+		$advert = new Advert();
+
+		// On crée le Form grâce au service form factory.
+		// Cette méthode utilise le composant Form pour construire un formulaire à partir du AdvertType passé en argument
+		//$form = $this->get('form.factory')->create(new AdvertType, $advert);   Version Longue
+		$form = $this->createForm(new AdvertType(), $advert);
+		
+		// On fait le lien Requête <-> Formulaire
+		// À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
+		//$form->handleRequest($request);
+
+		// On vérifie que les valeurs entrées sont correctes
+		// (Nous verrons la validation des objets en détail dans le prochain chapitre)
+		if ($form->handleRequest($request)->isValid()) {
+			// On l'enregistre notre objet $advert dans la base de données, par exemple
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($advert);
+			$em->flush();
+
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
-			
-			// Puis on redirige vers la page de visualisation de cettte annonce
-			return $this->redirect($this->generateUrl('oc_platform_view', array('id' => 1)));
+
+			// On redirige vers la page de visualisation de l'annonce nouvellement créée
+			return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
 		}
 
-		// Si on n'est pas en POST, alors on affiche le formulaire
-		return $this->render('OCPlatformBundle:Advert:add.html.twig');
+		// À ce stade, le formulaire n'est pas valide car :
+		// - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
+		// - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
+		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+			'form' => $form->createView()
+		));
 	}
 
 	
 	public function editAction($id) 
 	{
-		// Ici, on récupérera l'annonce correspondante à $id
-		// Même mécanisme que pour l'ajout
-		if ($request->isMethod('POST')) {
-			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
+		$advert = new Advert();
 
-			return $this->redirectToRoute('oc_platform_view', array('id' => 5));
-		}
-
-		$em = $this->getDoctrine()->getManager();
-
-		// On récupère l'annonce $id
-		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-
-		// Si l'annonce n'existe pas, on affiche une erreur 404
-		if ($advert == null) {
-			throw $this->createNotFoundException("L'annonce d'id " . $id . " n'existe pas.");
-		}
-
-		// Ici, on s'occupera de la création et de la gestion du formulaire
-
+		$form = $this->createForm(new AdvertEditType(), $advert);
 		
-		return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
-			'advert' => $advert
+		if ($form->handleRequest($request)->isValid()) {
+			// On l'enregistre notre objet $advert dans la base de données, par exemple
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($advert);
+			$em->flush();
+
+			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+			// On redirige vers la page de visualisation de l'annonce nouvellement créée
+			return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
+		}
+
+		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+					'form' => $form->createView(),
 		));
 	}
 

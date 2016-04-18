@@ -23,7 +23,7 @@ class OCPurger
 	public function removeOldUpdate($days) 
 	{
 		$date = date("Y-m-d H:i:s");
-		$substractDate = strtotime ( '-15 day' , strtotime ( $date ) ) ;
+		$substractDate = strtotime ($days.' day' , strtotime ( $date ) ) ;
 		$endDate = date ("Y-m-d H:i:s" , $substractDate );
 		
 		var_dump($endDate);
