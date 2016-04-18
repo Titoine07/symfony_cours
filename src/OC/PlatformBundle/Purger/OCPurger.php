@@ -26,13 +26,13 @@ class OCPurger
 		$substractDate = strtotime ( '-15 day' , strtotime ( $date ) ) ;
 		$endDate = date ("Y-m-d H:i:s" , $substractDate );
 		
-
+		var_dump($endDate);
 		
 		$listAdverts = $this->_em->createQueryBuilder();
 		
 		$listAdverts->select('a')
 			->from('OCPlatformBundle:Advert', 'a')
-			->where( 'a.updated_at < :subdate' )
+			->where( 'a.updated_at' <= ':subdate' )
 			->setParameter ( 'subdate', $endDate )
 			->getQuery()
 			->getResult()

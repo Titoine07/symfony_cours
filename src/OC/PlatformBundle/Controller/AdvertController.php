@@ -229,7 +229,7 @@ class AdvertController extends Controller {
 		// Affiche « Slug généré : recherche-developpeur »
 	}
 	
-	public function purge($days)
+	public function purgeAction($days)
 	{
 		$purgator = $this->container->get('oc_platform.advert_purger');
 	
