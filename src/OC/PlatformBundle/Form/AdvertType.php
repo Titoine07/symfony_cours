@@ -5,6 +5,8 @@ namespace OC\PlatformBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use OC\PlatformBundle\Repository\AdvertRepository;
 
 class AdvertType extends AbstractType
@@ -20,30 +22,54 @@ class AdvertType extends AbstractType
 			->add('title',		'text')
 			->add('author',		'text')
 			->add('content',		'textarea')
-			->add('published',	'checkbox', array('required' => false))
 			->add('image',		new ImageType())
-		
-			
 			/*Rappel :
 			- 1er argument : nom du champ, ici « categories », car c'est le nom de l'attribut
 			- 2e argument : type du champ, ici « collection » qui est une liste de quelque chose
-			- 3e argument : tableau d'options du champ*/
-			
+			- 3e argument : tableau d'options du champ
+			->add('categories', 'collection', array(
+			  'type'         => new CategoryType(),
+			  'allow_add'    => true,
+			  'allow_delete' => true*/
 			->add('categories', 'entity', array(
 				'class' => 'OCPlatformBundle:Category',
 				'property' => 'name',
-				'multiple' => true
+				'multiple' => true,
+				'expanded' => true
 			))
-			->add('save', 'submit')
 			;
+
+		//	public function setDefaultOptions(OptionsResolverInterface $resolver) {
+		//		$resolver->setDefaults(array(
+		//			'data_class' => 'OC\PlatformBundle\Entity\Advert'
+		//		));
+		//	}
+	
+		// On ajoute une fonction qui va écouter un évènement
+		$builder->addEventListener(
+			FormEvents::PRE_SET_DATA, // 1er argument : L'évènement qui nous intéresse : ici, PRE_SET_DATA
+			function(FormEvent $event) { // 2e argument : La fonction à exécuter lorsque l'évènement est déclenché
+			//
+				// On récupère notre objet Advert sous-jacent
+				$advert = $event->getData();
+
+				// Cette condition est importante, on en reparle plus loin
+				if (null === $advert) {
+					return; // On sort de la fonction sans rien faire lorsque $advert vaut null
+				}
+
+				if (!$advert->getPublished() || null === $advert->getId()) {
+					// Si l'annonce n'est pas publiée, ou si elle n'existe pas encore en base (id est null),
+					// alors on ajoute le champ published
+					$event->getForm()->add('published', 'checkbox', array('required' => false));
+				} else {
+					// Sinon, on le supprime
+					$event->getForm()->remove('published');
+				}
+			}
+		);
+		$builder->add('save', 'submit');
 	}
-
-//	public function setDefaultOptions(OptionsResolverInterface $resolver) {
-//		$resolver->setDefaults(array(
-//			'data_class' => 'OC\PlatformBundle\Entity\Advert'
-//		));
-//	}
-
 	/**
      * @param OptionsResolver $resolver
      */

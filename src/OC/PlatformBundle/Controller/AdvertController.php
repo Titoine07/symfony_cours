@@ -114,6 +114,11 @@ class AdvertController extends Controller {
 		// On vérifie que les valeurs entrées sont correctes
 		// (Nous verrons la validation des objets en détail dans le prochain chapitre)
 		if ($form->handleRequest($request)->isValid()) {
+			
+			// Ajoutez cette ligne :
+			// c'est elle qui déplace l'image là où on veut les stocker
+			$advert->getImage()->upload();
+
 			// On l'enregistre notre objet $advert dans la base de données, par exemple
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($advert);
@@ -134,27 +139,32 @@ class AdvertController extends Controller {
 	}
 
 	
-	public function editAction($id) 
+	public function editAction($id, Request $request) 
 	{
-		$advert = new Advert();
-
-		$form = $this->createForm(new AdvertEditType(), $advert);
 		
-		if ($form->handleRequest($request)->isValid()) {
-			// On l'enregistre notre objet $advert dans la base de données, par exemple
 			$em = $this->getDoctrine()->getManager();
-			$em->persist($advert);
-			$em->flush();
 
-			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+			// On récupère l'annonce $id
+			$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+		
+			$form = $this->createForm(new AdvertEditType(), $advert);
 
-			// On redirige vers la page de visualisation de l'annonce nouvellement créée
-			return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
-		}
+			if ($form->handleRequest($request)->isValid()) {
+				// On l'enregistre notre objet $advert dans la base de données, par exemple
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($advert);
+				$em->flush();
 
-		return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
-					'form' => $form->createView(),
-		));
+				$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+				// On redirige vers la page de visualisation de l'annonce nouvellement créée
+				return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
+			}
+
+			return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+						'form' => $form->createView(),
+			));
+		
 	}
 
 	

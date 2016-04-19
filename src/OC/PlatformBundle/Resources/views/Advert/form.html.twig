@@ -29,7 +29,8 @@
         {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
       </div>
     </div>
-
+	  
+    {% if form.date is defined %}
   {# Génération du label + error + widget pour un champ #}
     <div class='form-group'>
       {{ form_label(form.date, "Date de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
@@ -39,6 +40,7 @@
         {{ form_widget(form.date) }}
       </div>
     </div>
+    {% endif %}
 
     <div class='form-group'>
       {{ form_label(form.author, "Auteur de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
@@ -49,14 +51,16 @@
       </div>
     </div>
 
-    <div class='form-group'>
-      {{ form_label(form.published, "Auteur de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
-      {{ form_errors(form.published) }}
+    {% if form.published is defined %}
+	<div class='form-group'>
+		{{ form_label(form.published, "Publication de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+		{{ form_errors(form.published) }}
 
-      <div class="col-sm-4">
-        {{ form_widget(form.published) }}
-      </div>
-    </div>
+        <div class="col-sm-4">
+            {{ form_widget(form.published) }}
+        </div>
+	</div>
+    {% endif %}
 	  
     {# Génération automatique des champs pas encore écrits.
      Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
@@ -84,8 +88,8 @@
 	  var $container = $('div#oc_platformbundle_advert_categories');
 
 	  // On ajoute un lien pour ajouter une nouvelle catégorie
-	  var $addLink = $('<a href="#" id="add_category" class="btn btn-default">Ajouter une catégorie</a>');
-	  $container.append($addLink);
+	  //var $addLink = $('<a href="#" id="add_category" class="btn btn-default">Ajouter une catégorie</a>');
+	  //$container.append($addLink);
 
 	  // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
 	  $addLink.click(function(e) {
