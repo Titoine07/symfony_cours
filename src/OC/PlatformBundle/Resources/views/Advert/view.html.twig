@@ -13,7 +13,10 @@
    
       {% if advert.image is not null %}
         <div class="col-xs-3"><div >  
-        <img style="width : 170px; margin-top: 15px " src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+        <img style="width : 170px; margin-top: 15px " 
+            src="{{ asset(advert.image.webPath) }}"
+            alt="{{ advert.image.alt }}"
+        >
         </div></div>
 	 {% endif %}
 	  
