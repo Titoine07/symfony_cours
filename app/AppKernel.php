@@ -17,8 +17,9 @@ class AppKernel extends Kernel
 			new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 			new OC\PlatformBundle\OCPlatformBundle(),
 			new CoreBundle\CoreBundle(),
-			new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
-		);
+			new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new OC\UserBundle\OCUserBundle(),
+        );
 
 		if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
 			$bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
