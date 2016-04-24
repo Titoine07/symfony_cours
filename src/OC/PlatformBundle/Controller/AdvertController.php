@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Form\AdvertType;
 use OC\PlatformBundle\Form\AdvertEditType;
@@ -19,6 +20,7 @@ class AdvertController extends Controller
 
 	public function indexAction($page)
 	{
+		
 		// On ne sait pas combien de pages il y a
 		// Mais on sait qu'une page doit être supérieure ou égale à 1
 		if ($page < 1) {
@@ -102,6 +104,15 @@ class AdvertController extends Controller
 	
 	public function addAction(Request $request) 
 	{
+		    // On vérifie que l'utilisateur dispose bien du rôle ROLE_AUTEUR
+		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			// Sinon on déclenche une exception « Accès interdit »
+			throw new AccessDeniedException('Accès limité aux auteurs.');
+		}
+
+		// Ici l'utilisateur a les droits suffisant,
+    // on peut ajouter une annonce
+		
 		
 		// On crée un objet Advert
 		$advert = new Advert();
