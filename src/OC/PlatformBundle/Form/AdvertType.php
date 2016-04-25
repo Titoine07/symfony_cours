@@ -21,7 +21,7 @@ class AdvertType extends AbstractType
 			->add('date',		'date')
 			->add('title',		'text')
 			->add('author',		'text')
-			->add('content',		'textarea')
+			->add('content',		'ckeditor')
 			->add('image',		new ImageType())
 			/*Rappel :
 			- 1er argument : nom du champ, ici « categories », car c'est le nom de l'attribut
@@ -70,6 +70,7 @@ class AdvertType extends AbstractType
 		);
 		$builder->add('save', 'submit');
 	}
+	
 	/**
      * @param OptionsResolver $resolver
      */

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 14 Avril 2016 à 08:56
+-- Généré le :  Lun 25 Avril 2016 à 14:58
 -- Version du serveur :  5.7.9
 -- Version de PHP :  5.6.16
 
@@ -42,20 +42,20 @@ CREATE TABLE IF NOT EXISTS `advert_category` (
 INSERT INTO `advert_category` (`advert_id`, `category_id`) VALUES
 (1, 6),
 (1, 9),
-(2, 6),
-(2, 7),
-(2, 8),
-(2, 9),
-(2, 10),
 (3, 6),
 (3, 7),
 (3, 8),
-(3, 10),
 (4, 6),
 (4, 7),
 (4, 8),
 (4, 9),
-(4, 10);
+(7, 9),
+(9, 9),
+(9, 10),
+(12, 6),
+(12, 8),
+(12, 9),
+(12, 10);
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `category`
@@ -140,7 +140,12 @@ INSERT INTO `category` (`id`, `name`) VALUES
 (7, 'Développement mobile'),
 (8, 'Graphisme'),
 (9, 'Intégration'),
-(10, 'Réseau');
+(10, 'Réseau'),
+(11, 'Développement web'),
+(12, 'Développement mobile'),
+(13, 'Graphisme'),
+(14, 'Intégration'),
+(15, 'Réseau');
 
 -- --------------------------------------------------------
 
@@ -154,16 +159,18 @@ CREATE TABLE IF NOT EXISTS `image` (
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `alt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `image`
 --
 
 INSERT INTO `image` (`id`, `url`, `alt`) VALUES
-(1, 'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg', 'Job de rêve'),
-(2, 'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg', 'Job de rêve'),
-(3, 'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg', 'Job de rêve');
+(1, 'jpg', 'job-de-reve.jpg'),
+(3, 'jpg', 'job-de-reve.jpg'),
+(5, 'jpeg', 'Mandrill-Mandrillus-Sphinx-copia.jpg'),
+(7, 'png', 'MElogo.png'),
+(9, 'jpeg', 'normandy_01.jpg');
 
 -- --------------------------------------------------------
 
@@ -185,17 +192,19 @@ CREATE TABLE IF NOT EXISTS `oc_advert` (
   `slug` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_B1931753DA5256D` (`image_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `oc_advert`
 --
 
 INSERT INTO `oc_advert` (`id`, `date`, `title`, `author`, `content`, `published`, `image_id`, `updated_at`, `nb_applications`, `slug`) VALUES
-(1, '2016-04-11 13:26:03', 'Recherche développeur Symfony2.', 'Alexandre', 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…', 1, 1, NULL, 0, ''),
-(2, '2016-04-11 13:26:53', 'Mission de webmaster', 'Pierre', 'Nous recherchons un développeur Symfony2 débutant sur Strasbourg. Blabla…', 1, 2, '2016-04-12 09:37:59', 0, ''),
-(3, '2016-04-11 13:27:18', 'Offre de stage webdesigner', 'Jacques', 'Nous recherchons un développeur Symfony2 débutant sur Lille. Blabla…', 1, 3, NULL, 0, ''),
-(4, '2016-04-07 11:30:22', 'Recherche développeur Symfony2.', 'Chuck', 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…', 1, NULL, '2016-04-12 12:25:37', 0, '');
+(1, '2016-04-11 13:26:03', 'Recherche développeur Symfony2.', 'Alexandre', 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…', 1, 1, '2016-04-12 00:00:00', 0, ''),
+(3, '2016-04-11 13:27:18', 'Offre de stage webdesigner', 'Jacques', 'Nous recherchons un développeur Symfony2 débutant sur Lille. Blabla…', 1, 3, '2016-04-13 00:00:00', 0, ''),
+(4, '2016-04-07 11:30:22', 'Recherche développeur Symfony2.', 'Chuck', 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…', 1, NULL, '2016-04-12 12:25:37', 0, ''),
+(7, '2016-04-07 11:30:22', 'Ce soir Matt est chez lui.', 'Matt', 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…', 1, 5, '2016-04-20 09:33:44', 0, ''),
+(9, '2016-04-10 00:00:00', 'Chef de pont du Normandy', 'Colonel Shepard', 'Nous cherchons un chef de pont à la barre d''un vaisseau de guerre le Normandy SR1 et sous le commandement direct du Colonel Shepard.', 1, 7, '2016-04-19 14:42:57', 0, ''),
+(12, '2016-04-20 00:00:00', 'Chef de pont du Normandy', 'Colonel Shepard', 'Nous cherchons un chef de pont à la barre d''un vaisseau de guerre le Normandy SR1 et sous le commandement direct du Colonel Shepard.', 1, 9, '2016-04-20 09:34:44', 0, '');
 
 -- --------------------------------------------------------
 
@@ -208,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `skill`
@@ -221,7 +230,52 @@ INSERT INTO `skill` (`id`, `name`) VALUES
 (4, 'Java'),
 (5, 'Photoshop'),
 (6, 'Blender'),
-(7, 'Bloc-note');
+(7, 'Bloc-note'),
+(8, 'PHP'),
+(9, 'Symfony2'),
+(10, 'C++'),
+(11, 'Java'),
+(12, 'Photoshop'),
+(13, 'Blender'),
+(14, 'Bloc-note');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `username_canonical` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email_canonical` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `salt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `locked` tinyint(1) NOT NULL,
+  `expired` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `confirmation_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `password_requested_at` datetime DEFAULT NULL,
+  `roles` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '(DC2Type:array)',
+  `credentials_expired` tinyint(1) NOT NULL,
+  `credentials_expire_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_8D93D64992FC23A8` (`username_canonical`),
+  UNIQUE KEY `UNIQ_8D93D649A0D96FBF` (`email_canonical`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Contenu de la table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `locked`, `expired`, `expires_at`, `confirmation_token`, `password_requested_at`, `roles`, `credentials_expired`, `credentials_expire_at`) VALUES
+(1, 'Chuck', 'chuck', 'chuck.norris@tropfort.chuck', 'chuck.norris@tropfort.chuck', 1, '1ro634p0w58g8osc8k8sww884w44wsg', 'S/9w1f2nUSKsTzbrdWiqt7bRhlEaPPnszYf35RBBcvtbHfXVpc8P9XHECDmxZfuxikCclrDJ7SDNNTtuJSXLXQ==', '2016-04-25 14:12:08', 0, 0, NULL, NULL, NULL, 'a:1:{i:0;s:11:"ROLE_AUTEUR";}', 0, NULL),
+(2, 'antoine', 'antoine', 'antoine@gmail.com', 'antoine@gmail.com', 1, 'kul3oobr48goowwkkk0s8k0wcskc8gk', 'oaKsFX/zAUsZd1hob3Gu1bHe5B94SPV6/MKoLi9KdfJsjttJuJ9n2s0t/mH2kodjbU5EA1JqbLD4g2bjEFqoEQ==', '2016-04-25 12:57:51', 0, 0, NULL, NULL, NULL, 'a:1:{i:0;s:10:"ROLE_ADMIN";}', 0, NULL);
 
 --
 -- Contraintes pour les tables exportées

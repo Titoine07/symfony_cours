@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use OC\PlatformBundle\Validator\Antiflood;
-// N'oubliez pas ce use :
+// N'oubliez pas ce use : 
 use Gedmo\Mapping\Annotation as Gedmo;
 
 

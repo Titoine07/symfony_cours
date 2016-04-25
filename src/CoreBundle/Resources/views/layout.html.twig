@@ -5,6 +5,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="//cdn.ckeditor.com/4.5.8/standard/ckeditor.js"></script>
 
         <title>{% block title %}OC Plateforme{% endblock %}</title>
 
@@ -33,6 +34,14 @@
 
             <div class="row">
                 <div id="menu" class="col-md-3">
+				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+					<strong>Connecté en tant que {{ app.user.username }}</strong>
+					:<br/>
+					<a class="btn btn-danger btn-sm" href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+				{% else %}
+					<a class="btn btn-primary btn-sm" href="{{ path('fos_user_security_login') }}">Connexion</a>
+				{% endif %}
+
                     <h3>Les annonces</h3>
                     <ul class="nav nav-pills nav-stacked">
                         <li><a href="{{ path('oc_platform_home') }}">Accueil</a></li>
