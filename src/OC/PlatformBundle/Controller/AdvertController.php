@@ -12,7 +12,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Form\AdvertType;
 use OC\PlatformBundle\Form\AdvertEditType;
-use OC\PlatformBundle\Entity\AdvertSkill;
+use AB\BigbrotherBundle\Bigbrother\BigbrotherEvents;
+use AB\BigbrotherBundle\Bigbrother\MessagePostEvent;
 
 
 class AdvertController extends Controller 
@@ -130,8 +131,20 @@ class AdvertController extends Controller
 		// (Nous verrons la validation des objets en détail dans le prochain chapitre)
 		if ($form->handleRequest($request)->isValid()) 
 		{
+			// On crée l'évènement avec ses 2 arguments
+			$event = new MessagePostEvent($advert->getContent(), $advert->getUser());
 
-			// On l'enregistre notre objet $advert dans la base de données, par exemple
+			// On déclenche l'évènement
+			$this
+				->get('event_dispatcher')
+				->dispatch(BigbrotherEvents::onMessagePost, $event)
+			;
+
+			// On récupère ce qui a été modifié par le ou les listeners, ici le message
+			$advert->setContent($event->getMessage());
+			
+			
+			// On enregistre notre objet $advert dans la base de données, par exemple
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($advert);
 			$em->flush();

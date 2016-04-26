@@ -3,37 +3,38 @@
 <h3>Formulaire d'annonce</h3>
 
 <div class="well">
-  {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+  {{ form_start(form, {'attr': {'class': 'form-horizontal'} }) }}
 
     {# Les erreurs générales du formulaire. #}
     {{ form_errors(form) }}
 
     <div class="form-group">
       {# Génération du label. #}
-      {{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+      {{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'} }) }}
 
       {# Affichage des erreurs pour ce champ précis. #}
       {{ form_errors(form.title) }}
 
       <div class="col-sm-4">
         {# Génération de l'input. #}
-        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control'} }) }}
       </div>
     </div>
 
     {# Idem pour un autre champ. #}
     <div class="form-group">
-      {{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+      {{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'} }) }}
       {{ form_errors(form.title) }}
-      <div class="col-sm-4">
-        {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+	  </br>
+      <div class="col-sm-12">
+        {{ form_widget(form.content) }}
       </div>
     </div>
 	  
     {% if form.date is defined %}
   {# Génération du label + error + widget pour un champ #}
     <div class='form-group'>
-      {{ form_label(form.date, "Date de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+      {{ form_label(form.date, "Date de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'} }) }}
       {{ form_errors(form.date) }}
 
       <div class="col-sm-4">
@@ -43,17 +44,17 @@
     {% endif %}
 
     <div class='form-group'>
-      {{ form_label(form.author, "Auteur de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+      {{ form_label(form.author, "Auteur de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'} }) }}
       {{ form_errors(form.author) }}
 
       <div class="col-sm-4">
-        {{ form_widget(form.author, {'attr': {'class': 'form-control'}}) }}
+        {{ form_widget(form.author, {'attr': {'class': 'form-control'} }) }}
       </div>
     </div>
 
-    {% if form.published is defined %}
+       {% if form.published is defined %}
 	<div class='form-group'>
-		{{ form_label(form.published, "Publication de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'}}) }}
+		{{ form_label(form.published, "Publication de l'annonce", {'label_attr': {'class': 'col-sm-4 control-label'} }) }}
 		{{ form_errors(form.published) }}
 
         <div class="col-sm-4">
@@ -61,15 +62,17 @@
         </div>
 	</div>
     {% endif %}
-	  
-    {# Génération automatique des champs pas encore écrits.
+	
+	    {# Génération automatique des champs pas encore écrits.
      Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
      et tous les champs cachés (type « hidden »). #}
   {{ form_rest(form) }}
-  
-
-  {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-  {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}})}}
+	
+    <div class='form-group'>
+    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'} })}}
+    </div>
+	
 
 
   {# Fermeture de la balise <form> du formulaire HTML #}

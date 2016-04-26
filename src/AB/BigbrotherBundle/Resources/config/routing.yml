@@ -1,0 +1,3 @@
+ab_bigbrother_homepage:
+    path:     /
+    defaults: { _controller: ABBigbrotherBundle:Default:index }
