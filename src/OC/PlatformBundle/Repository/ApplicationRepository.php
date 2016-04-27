@@ -30,4 +30,17 @@ class ApplicationRepository extends EntityRepository
 				->getResult()
 			;
 	}
+
+		public function isFlood($ip, $sec )
+	{
+		$qb = $this->createQueryBuilder('a')
+			->select('COUNT(a)')
+			->where('a.ip = :ip')
+			->setParameter('ip', $ip)
+			->andWhere('a.date >= :date')
+			->setParameter('date', new \Datetime('-'.$sec.'seconds'));
+		
+		return (bool) $qb->getQuery()->getSingleScalarResult();
+	}
+
 }

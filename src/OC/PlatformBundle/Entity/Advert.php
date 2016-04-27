@@ -4,6 +4,7 @@ namespace OC\PlatformBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use OC\PlatformBundle\Validator\Antiflood;
@@ -458,7 +459,7 @@ class Advert {
 	/**
 	 * @Assert\Callback
 	*/
-	public function isContentValid(ExecutionContextInterface $context) 
+	public function isContentValid(ExecutionContext $context) 
 	{
 		$forbiddenWords = array('échec', 'abandon');
 

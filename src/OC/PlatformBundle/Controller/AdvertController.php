@@ -304,4 +304,12 @@ class AdvertController extends Controller
 		
 		$purgator->removeOldUpdate($days);
 	}
+	
+	public function translationAction($name) 
+	{
+		return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
+					'name' => $name
+		));
+	}
+
 }
