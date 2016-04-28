@@ -35,7 +35,9 @@ oc_platform_home:
         page: \d*
         
 oc_platform_view:
-    path:      /platform/advert/{id}
+    path:      /advert/{id}
+#  On pourrai laisser {id} et ne pas mettre d'annotation. Comme id et un champs de l'entity advert ParamConverter fait le lien. MAIS
+#Il vaut mieux utiliser cette façon de faire quand il y a un autre champs que id et/ou d'autre entité à mettre dans l'argument de la méthode
     defaults:  { _controller: OCPlatformBundle:Advert:view }
     requirements:
         id: \d+

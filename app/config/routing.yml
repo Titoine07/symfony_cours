@@ -4,12 +4,17 @@ ab_bigbrother:
 
 core:
     resource: "@CoreBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}
+    requirements:
+        _locale: en|fr
+        # les locales disponibles, séparées par des pipes « | »
 
 oc_platform:
     resource: "@OCPlatformBundle/Resources/config/routing.yml"
-    prefix:   /
-
+    prefix:   /{_locale}
+    requirements:
+        _locale: en|fr
+        # les locales disponibles, séparées par des pipes « | »
 
     
 fos_user_security:

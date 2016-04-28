@@ -4,6 +4,8 @@
 
 namespace OC\PlatformBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,7 +61,9 @@ class AdvertController extends Controller
 	}
 
 	
-	public function viewAction($id)
+//	pour utiliser le DoctrineParamConverter côté contrôleur, il faut typer un argument de la méthode. ici Advert
+	
+	public function viewAction(Advert $advert)
 	{
 		// Ici, on récupérera l'annonce correspondante à l'id $id
 		
@@ -71,16 +75,14 @@ class AdvertController extends Controller
 		// ->find('OCPlatformBundle:Advert', $id)
 
 		// On récupère l'annonce $id
-		$advert = $em
-		  ->getRepository('OCPlatformBundle:Advert')
-		  ->find($id)
-		;
+//		$advert = $em->find('OC\PlatformBundle\Entity\Advert', $id);    || nous utilisons maintenant DoctrineParamConverter pour récuperer automatiquement l'entité Advert 
+		
 
 		// $advert est donc une instance de OC\PlatformBundle\Entity\Advert
 		// ou null si l'id $id  n'existe pas, d'où ce if :
-		if (null === $advert) {
-			throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas.");
-		}
+//		if (null === $advert) {
+//			throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas.");  || DoctrineParamConverter gére également les exception.
+//		}
 
 		// On récupère la liste des candidatures de cette annonce
 		$listApplications = $em

@@ -1,0 +1,6 @@
+core:
+    header:
+        titre: My Advertisement plateform
+        sous_titre: This project is propulsed par Symfony2, et construct grâce au MOOC OpenClassrooms and SensioLabs.
+    menu:
+        connection: "Connected as %app.user.username%:"

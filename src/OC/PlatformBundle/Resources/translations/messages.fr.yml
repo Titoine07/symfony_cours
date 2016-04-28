@@ -1,3 +1,8 @@
-Hello: Bonjour
-List of advertisement: Liste des annonces
-Advertisement: Annonces
+core:
+    header:
+        titre: Ma plateforme d'annonces
+        sous_titre: Ce projet est propulsé par Symfony2, et construit grâce au MOOC OpenClassrooms et SensioLabs.
+    menu:
+        connection: "Connecté en tant que %app.user.username% :"
+
+

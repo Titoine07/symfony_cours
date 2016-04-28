@@ -20,14 +20,12 @@
     <body>
         <div class="container">
             <div id="header" class="jumbotron">
-                <h1>Ma plateforme d'annonces</h1>
-                <p>
-                    Ce projet est propulsé par Symfony2,
-                    et construit grâce au MOOC OpenClassrooms et SensioLabs.
-                </p>
+                <h1>{{ 'core.header.titre' | trans }}</h1>
+                <p>{{ 'core.header.sous_titre' | trans }}</p>
                 <p>
                     <a class="btn btn-primary btn-lg" href="http://fr.openclassrooms.com/informatique/cours/developpez-votre-site-web-avec-le-framework-symfony2">
-                        Participer au MOOC »
+                        {{ 'core.header.lien' | trans({}, 'button') }} 
+				{#Pour éviter d'avoir de fichier de traduction trop important on peut en faire un avec un domaine différent. ici button a la place de message en standart.#}
                     </a>
                 </p>
             </div>
@@ -35,8 +33,9 @@
             <div class="row">
                 <div id="menu" class="col-md-3">
 				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-					<strong>Connecté en tant que {{ app.user.username }}</strong>
-					:<br/>
+					<strong>{{ 'core.menu.connection' | trans({'%app.user.username%': app.user.username}) }}</strong>
+					{#La valeur de ce placeholder %app.user.username% sera spécifiée lors du rendu de la vue#}
+					<br/>
 					<a class="btn btn-danger btn-sm" href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
 				{% else %}
 					<a class="btn btn-primary btn-sm" href="{{ path('fos_user_security_login') }}">Connexion</a>
