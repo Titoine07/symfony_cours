@@ -20,7 +20,8 @@ class AppKernel extends Kernel
 			new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 			new OC\UserBundle\OCUserBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
-            new AB\BigbrotherBundle\ABBigbrotherBundle(),
+			new AB\BigbrotherBundle\ABBigbrotherBundle(),
+			new Symfony\Bundle\AsseticBundle\AsseticBundle()
         );
 
 		if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
@@ -29,7 +30,7 @@ class AppKernel extends Kernel
 			$bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
 			$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
 			$bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
-		}
+			}
 
 		return $bundles;
 	}

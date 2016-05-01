@@ -81,3 +81,10 @@ fos_user:
     # Le nom du firewall derrière lequel on utilisera ces utilisateurs
     user_class:    OC\UserBundle\Entity\User
     # La classe de l'entité User que nous utilisons
+    
+assetic:
+    debug:               '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+            
